@@ -10,14 +10,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.maya.batteryalarm.ui.BatteryViewModel
@@ -31,23 +32,19 @@ class MainActivity : ComponentActivity() {
 
         val batteryVM = BatteryViewModel()
         batteryReceiver = getReceiver(this, batteryVM)
+
         enableEdgeToEdge()
         setContent {
             BatteryAlarmTheme {
-                BatteryStatusScreen(viewModel = batteryVM)
+                BatteryAlarm(viewModel = batteryVM)
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(batteryReceiver)
     }
 }
 
 
 @Composable
-fun BatteryStatusScreen(viewModel: BatteryViewModel = viewModel()) {
+fun BatteryAlarm(viewModel: BatteryViewModel = viewModel(), modifier: Modifier = Modifier) {
     val batteryLevel by viewModel.level.collectAsState()
     val batteryImage = if(batteryLevel>25) R.drawable.battery_full else R.drawable.battery_low
 
@@ -57,8 +54,17 @@ fun BatteryStatusScreen(viewModel: BatteryViewModel = viewModel()) {
             .fillMaxSize()
     ) {
         Image(painter = painterResource(batteryImage),
-             contentDescription = "Battery image")
+            modifier = modifier
+                .size(250.dp),
+            contentDescription = "Battery image")
     }
+}
+
+
+@Preview(showSystemUi = true)
+@Composable
+private fun BatteryAlarmPreview(){
+    BatteryAlarm()
 }
 
 
