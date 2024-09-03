@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val batteryVM = BatteryViewModel()
-        batteryReceiver = getReceiver(this, batteryVM)
+        batteryReceiver = setReceiver(this, batteryVM)
 
         enableEdgeToEdge()
         setContent {
@@ -68,7 +67,7 @@ private fun BatteryAlarmPreview(){
 }
 
 
-fun getReceiver(activity: ComponentActivity, batteryVM: BatteryViewModel): BatteryReciever {
+fun setReceiver(activity: ComponentActivity, batteryVM: BatteryViewModel): BatteryReciever {
     val batteryReceiver = BatteryReciever(batteryVM)
     val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
     activity.registerReceiver(batteryReceiver, filter)
